@@ -9,12 +9,17 @@ from sqlalchemy.orm import sessionmaker
 from auth import AuthHandler
 from database.models.admins import admins
 from database.admins_accessor import Admin_Accessor
+from database.models.otp_session import OTP_Session
 from database.models.users import Users
 from database.accessor import Accessor
 from fastapi.middleware.cors import CORSMiddleware
+from database.otp_accessor import Otp_Accessor
+from database.users_accsesor import User_Accessor
 from login import LoginRouter,LoginService
 from database.models.base import Base
 from dotenv import load_dotenv
+
+from otp_router import Opt_service, Otp_router
 
             
 auth_handler = AuthHandler()
@@ -29,7 +34,7 @@ def create_startup(app):
         """
         #sql-------#
 
-        engine = create_engine("sqlite:///sensorData.db")
+        engine = create_engine("sqlite:///database.db")
         Session = sessionmaker(bind=engine)
         session = Session()
         Base.metadata.create_all(engine)
@@ -37,6 +42,13 @@ def create_startup(app):
         login_acceessor = Admin_Accessor(session,admins)
         l_service = LoginService(login_acceessor)
         app.include_router(LoginRouter(name="users",service=l_service,auth_handler=auth_handler),prefix="/login")
+        #----USERS--#
+        users_accessor = User_Accessor(session,Users)
+        #----OTP----#
+        otp_accessor = Otp_Accessor(session,OTP_Session)
+        otp_service = Opt_service(otp_accessor,users_accessor=users_accessor)
+        app.include_router(Otp_router(name="otp",service=otp_service),prefix="/otp")
+
         app.add_api_route("/protected",endpoint=protected,methods=["GET"])
 
     return startup
