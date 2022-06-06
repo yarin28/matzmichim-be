@@ -1,4 +1,3 @@
-
 from sqlalchemy import Column,Integer,String
 from database.models.base import Base
 
@@ -8,5 +7,4 @@ class Users(Base):
     email = Column(String(250), nullable=False)
     full_name = Column(String(250), nullable=False)
     phone = Column(String(15), nullable=False)
-    course_id = Column(Integer, nullable=False)
-    language_id = Column(Integer, nullable=True)
+    
