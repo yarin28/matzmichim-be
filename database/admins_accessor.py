@@ -21,9 +21,10 @@ class Admin_Accessor(Accessor):
 
     #TODO: only for the users table -> should be moved to a different accsesor
     def get_user(self,name:str):
+        #TODO: develop the query
         return rows
        
 
     def add_user(self,name:str,hashed_password:str):
-        self.session.add(self.model(username=name,password = hashed_password))
-        self.session.commit()
+        self.add(self.model(username=name,password = hashed_password))
+        
