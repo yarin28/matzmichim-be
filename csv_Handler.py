@@ -38,3 +38,15 @@ class Validator:
     def validate_email(value: str) -> bool:
         return re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', value) is not None
     
+    def validate_full_name(value: str) -> bool:
+        # return re.match(r'^[\w\s]+$', value) is not None
+        if len(value.split()) <2:
+            return False
+        for name in value.split(" "):
+            if len(name) ==0:
+                return False
+            for letter in name:
+                if letter.isalpha():
+                    continue
+                else:
+                    return False
