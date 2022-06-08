@@ -28,7 +28,7 @@ class User_Accessor(Accessor):
 
 
     def get_row_using_email(self,email:String):
-        row = self.session.query(self.model).filter(self.model.email == email).all()
+        row = self.session.query(self.model).filter(self.model.email == email).all()#HACK:replace the filter with get for performance?
         print(row)
         if len(row) >1:
             return None
