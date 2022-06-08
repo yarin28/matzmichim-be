@@ -55,6 +55,9 @@ class AdminRouter(APIRouter):
         
         #newly added
         self.add_api_route("/register",endpoint=self.register,methods = ["POST"],status_code=201)
+        self.add_api_route("/validate_csv",endpoint=self.validate_csv,methods = ["POST"],status_code=201)
+        self.add_api_route("/upload_csv",endpoint=self.upload_csv,methods = ["POST"],status_code=201)
+
 
     async def register(self,username:str,password:str,response:Response):
         if any(x.username == username for x in self.service.get_all()):
