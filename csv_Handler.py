@@ -55,3 +55,16 @@ class CsvHandler:
     #TODO: add more description to error messages
     def __init__(self):
         pass
+
+    def validate_row(row:dict)->dict:
+        #the result key should be added in the parent function not here
+        row["RESULT"] = []
+        if Validator.validate_israeli_id(row["ID"]) is False:
+            row["RESULT"].append({"ERROR_PLACE":"ID","ERROR_MESSAGE": "ID is not valid"}) 
+        if Validator.validate_email(row["Email"]) is False:
+            row["RESULT"].append({"ERROR_PLACE":"Email","ERROR_MESSAGE": "EMAIL is not valid"})
+        if Validator.validate_full_name(row["Full_name"]) is False:
+            row["RESULT"].append({"ERROR_PLACE":"Full Name","ERROR_MESSAGE": "Full Name is not valid"})
+        if Validator.validate_phone_number(row["Phone"]) is False:
+            row["RESULT"].append({"ERROR_PLACE":"Phone Number","ERROR_MESSAGE": "Phone Number is not valid"})
+        return row
