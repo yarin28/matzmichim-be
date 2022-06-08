@@ -127,3 +127,18 @@ class AdminRouter(APIRouter):
             data.append(row)
         return data
 
+    async def upload_csv(self,course_name:str, course_short_desc, response:Response,file:UploadFile = File(...)):
+        contents = await file.read()
+        decoded = contents.decode()
+        buffer = StringIO(decoded)
+        csvReader = csv.DictReader(buffer)
+        data = []
+        data = self.validate_rows(csvReader)
+        data = self.update_users_rows(data)
+        data = self.add_users_rows(data)
+
+        for row in self.service.get_all_users():
+            print(row.__dict__)
+        self.service.commit_users_table()
+        buffer.close()
+        return data
