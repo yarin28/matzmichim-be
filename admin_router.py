@@ -99,3 +99,20 @@ class AdminRouter(APIRouter):
             data.append(row) 
         return data
 
+    def update_users_rows(self,rows):
+        data = []
+        for row in rows:
+            if  row['RESULT'] == []:
+                user = self.service.get_user(row['ID'])
+                if user is not None:
+                    # row['RESULT'].append({'UPDATE':[]})
+                    for key,value in row.items():
+                        if key.lower() in user.__dict__.keys():
+                            if value != user.__dict__[key.lower()] :
+
+                                row['RESULT'].append({'FIELD':key,
+                                'OLD_VALUE':user.__dict__[key.lower()],
+                                'NEW_VALUE':row[key]})
+                            setattr(user,key.lower(),value)
+            data.append(row)
+        return data
