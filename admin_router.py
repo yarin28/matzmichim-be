@@ -81,3 +81,13 @@ class AdminRouter(APIRouter):
             raise HTTPException(status_code=401, detail='Invalid username or password')
         token = self.auth_handler.encode_token(username)
         return {'token':token}
+
+    async def validate_csv(self,file:UploadFile = File(...)):
+        
+        contents = await file.read()
+        decoded = contents.decode()
+        buffer = StringIO(decoded)
+        rows = csv.DictReader(buffer)
+        data = self.validate_rows(buffer, rows)
+        buffer.close()
+        return data
