@@ -11,18 +11,22 @@ wrapper to the asscessor and features many different functions to deal with the
 users and passwords. It supplies the programmer an easy way to work with the
 users table.
     """
-    def __init__(self,accsesor : Accessor)-> None:
-        self.accsesor = accsesor
+    def __init__(self,admin_accessor : Admin_Accessor,users_accessor :User_Accessor)-> None:
+        self.admin_accessor = admin_accessor
+        self.users_accessor = users_accessor
 
-    def get_user(self , name :str):
-        return self.accsesor.get_user(name)
-    def get_all(self):
-        return self.accsesor.get_all()
+    def get_user(self , Id :str):
+        return self.users_accessor.get_user(Id)
+    def get_all_admins(self):
+        return self.admin_accessor.get_all()
+    def get_all_users(self):
+        return self.users_accessor.get_all()
 
-    def add_user(self,name:str,password:str):
-        self.accsesor.add_user(name,password)
+    def add_user(self,Id:str,email:str,full_name:str,phone:str):
+        self.users_accessor.add_user(Id,email,full_name,phone)
         return True
-    
+    def commit_users_table(self):
+        self.users_accessor.commit_table()
     def check_password(self,username:str,password:str):
         user = self.get_user(username)
         if user is None:
