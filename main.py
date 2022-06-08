@@ -6,6 +6,7 @@ from asyncio import sleep
 from typing import List
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from admin_router import AdminRouter, AdminService
 from auth import AuthHandler
 from database.models.admins import admins
 from database.admins_accessor import Admin_Accessor
@@ -48,6 +49,11 @@ def create_startup(app):
         otp_accessor = Otp_Accessor(session,OTP_Session)
         otp_service = Opt_service(otp_accessor,users_accessor=users_accessor)
         app.include_router(Otp_router(name="otp",service=otp_service),prefix="/otp")
+        #----ADMINS--#
+        admin_accessor = Admin_Accessor(session,admins)
+        a_service = AdminService(admin_accessor,users_accessor=users_accessor)
+        app.include_router(AdminRouter(name="admins",service=a_service,auth_handler=auth_handler),prefix="/admins")
+
 
         app.add_api_route("/protected",endpoint=protected,methods=["GET"])
 
