@@ -50,3 +50,8 @@ class Validator:
                     continue
                 else:
                     return False
+
+class CsvHandler:
+    #TODO: add more description to error messages
+    def __init__(self):
+        pass
