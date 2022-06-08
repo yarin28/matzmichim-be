@@ -116,3 +116,14 @@ class AdminRouter(APIRouter):
                             setattr(user,key.lower(),value)
             data.append(row)
         return data
+
+    def add_users_rows(self,rows):
+        data = []
+        for row in rows:
+            if  not "RESULT" in list(row.keys()):
+                row["RESULT"] = []
+                row["RESULT"].append({"ADD":"SUCCESS"})
+                self.service.add_user(row["ID"],row["Email"],row["Full name"],row["Phone"])
+            data.append(row)
+        return data
+
