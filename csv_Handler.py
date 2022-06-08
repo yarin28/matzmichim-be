@@ -24,6 +24,16 @@ class Validator:
 
         return str(check_digit) == value[-1]
 
+    def reduce_phone_number(value: str) -> str:
+        return ''.join(value.split('-'))
+
+    def validate_phone_number(value: str) -> bool:
+        value = Validator.reduce_phone_number(value)
+        if len(value) != 10:
+            return False
+        prefix = value[0:3]
+        return prefix in ('05' + str(digit) for digit in range(0, 10))
+
 
     def validate_email(value: str) -> bool:
         return re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', value) is not None
