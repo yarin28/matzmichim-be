@@ -91,3 +91,11 @@ class AdminRouter(APIRouter):
         data = self.validate_rows(buffer, rows)
         buffer.close()
         return data
+
+    def validate_rows(self, rows):
+        data = []
+        for row in rows:             
+            row =  CsvHandler.validate_row(row)
+            data.append(row) 
+        return data
+
