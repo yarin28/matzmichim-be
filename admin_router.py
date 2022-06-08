@@ -44,8 +44,8 @@ users table.
         return user_password == hashlib.sha256(salt.encode() + password.encode()).hexdigest()
     
 
-class LoginRouter(APIRouter):
-    def __init__(self,service:LoginService,name:str="",auth_handler:AuthHandler=None):
+class AdminRouter(APIRouter):
+    def __init__(self,service:AdminService,name:str="",auth_handler:AuthHandler=None):
         super().__init__()
         self.auth_handler = auth_handler
         self.service = service
