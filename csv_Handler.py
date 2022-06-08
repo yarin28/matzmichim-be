@@ -1,4 +1,6 @@
 
+import re
+
 class Validator:
 
     def validate_israeli_id(value: str) -> bool:
@@ -21,3 +23,8 @@ class Validator:
             check_digit += 1
 
         return str(check_digit) == value[-1]
+
+
+    def validate_email(value: str) -> bool:
+        return re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', value) is not None
+    
