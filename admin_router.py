@@ -3,7 +3,7 @@ import csv
 import hashlib
 import json
 from io import StringIO
-from fastapi import APIRouter, HTTPException,Response,status, UploadFile,File
+from fastapi import APIRouter, Form, HTTPException,Response,status, UploadFile,File
 from auth import AuthHandler
 from csv_Handler import CsvHandler
 from database.users_accsesor import User_Accessor
@@ -32,7 +32,7 @@ users table.
         self.users_accessor.add_user(Id,email,full_name,phone)
         return True
     def commit_users_table(self):
-        self.users_accessor.commit_table()
+        self.users_accessor.commit()
     def check_password(self,username:str,password:str):
         user = self.get_user(username)
         if user is None:
@@ -91,7 +91,7 @@ class AdminRouter(APIRouter):
         decoded = contents.decode()
         buffer = StringIO(decoded)
         rows = csv.DictReader(buffer)
-        data = self.validate_rows(buffer, rows)
+        data = self.validate_rows( rows)
         buffer.close()
         return data
 
@@ -113,7 +113,7 @@ class AdminRouter(APIRouter):
                         if key.lower() in user.__dict__.keys():
                             if value != user.__dict__[key.lower()] :
 
-                                row['RESULT'].append({'FIELD':key,
+                                row['RESULT'].append({'UPDATED':key,
                                 'OLD_VALUE':user.__dict__[key.lower()],
                                 'NEW_VALUE':row[key]})
                             setattr(user,key.lower(),value)
@@ -123,14 +123,17 @@ class AdminRouter(APIRouter):
     def add_users_rows(self,rows):
         data = []
         for row in rows:
-            if  not "RESULT" in list(row.keys()):
-                row["RESULT"] = []
-                row["RESULT"].append({"ADD":"SUCCESS"})
-                self.service.add_user(row["ID"],row["Email"],row["Full name"],row["Phone"])
+            if  row['RESULT'] == []:
+                if self.service.get_user(row['ID']) is None:
+                    row["RESULT"].append({"ADDED":"added"})
+                    self.service.add_user(row["ID"],row["Email"],row["Full_name"],row["Phone"])
+                else:
+                    row["RESULT"].append({"NOTHING":"already exists"})
             data.append(row)
         return data
 
-    async def upload_csv(self,course_name:str, course_short_desc, response:Response,file:UploadFile = File(...)):
+    async def upload_csv(self,response:Response,course_name:str = Form(...), course_short_desc:str=Form(...) , file:UploadFile = File(...)):
+        print(response)
         contents = await file.read()
         decoded = contents.decode()
         buffer = StringIO(decoded)
