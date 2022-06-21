@@ -27,6 +27,9 @@ class User_Accessor(Accessor):
         self.add(self.model(id = id,email = email,full_name = full_name,phone = phone))
 
 
+    def commit(self):
+        self.session.commit()
+
     def get_row_using_email(self,email:String):
         row = self.session.query(self.model).filter(self.model.email == email).all()#HACK:replace the filter with get for performance?
         print(row)
