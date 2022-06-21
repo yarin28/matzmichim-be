@@ -64,7 +64,7 @@ class CsvHandler:
         if Validator.validate_email(row["Email"]) is False:
             row["RESULT"].append({"ERROR_PLACE":"Email","ERROR_MESSAGE": "EMAIL is not valid"})
         if Validator.validate_full_name(row["Full_name"]) is False:
-            row["RESULT"].append({"ERROR_PLACE":"Full Name","ERROR_MESSAGE": "Full Name is not valid"})
+            row["RESULT"].append({"ERROR_PLACE":"Full_name","ERROR_MESSAGE": "Full Name is not valid"})
         if Validator.validate_phone_number(row["Phone"]) is False:
-            row["RESULT"].append({"ERROR_PLACE":"Phone Number","ERROR_MESSAGE": "Phone Number is not valid"})
+            row["RESULT"].append({"ERROR_PLACE":"Phone","ERROR_MESSAGE": "Phone Number is not valid"})
         return row
